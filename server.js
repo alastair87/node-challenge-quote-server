@@ -18,9 +18,16 @@ app.get("/", function (request, response) {
 
 //START OF YOUR CODE...
 
-app.get("/quotes", (req, res) => res.send(quotes));
+const filterQuotes = (term) => {
+  const filter = new RegExp(`${term}`, "i");
+  return quotes.filter(quote => quote.quote.match(filter) || quote.author.match(filter));
+}
 
-app.get("/quotes/random", (req, res) => res.send(pickFromArray(quotes)));
+app.get("/quotes", (_, res) => res.send(quotes));
+
+app.get("/quotes/random", (_, res) => res.send(pickFromArray(quotes)));
+
+app.get("/quotes/search", (req, res)  =>  res.send(filterQuotes(req.query.term)));
 
 //...END OF YOUR CODE
 
@@ -33,6 +40,6 @@ function pickFromArray(arr) {
 }
 
 //Start our server so that it listens for HTTP requests!
-const listener = app.listen(process.env.PORT, function () {
+const listener = app.listen(3000, function () {
   console.log("Your app is listening on port " + listener.address().port);
 });
