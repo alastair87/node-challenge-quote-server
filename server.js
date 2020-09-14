@@ -8,6 +8,10 @@ const app = express();
 //load the quotes JSON
 const quotes = require("./quotes.json");
 
+// load lodash
+
+const _ = require("lodash");
+
 // Now register handlers for some routes:
 //   /                  - Return some helpful welcome info (text)
 //   /quotes            - Should return all quotes (json)
@@ -23,9 +27,9 @@ const filterQuotes = (term) => {
   return quotes.filter(quote => quote.quote.match(filter) || quote.author.match(filter));
 }
 
-app.get("/quotes", (_, res) => res.send(quotes));
+app.get("/quotes", (req, res) => res.send(quotes));
 
-app.get("/quotes/random", (_, res) => res.send(pickFromArray(quotes)));
+app.get("/quotes/random", (req, res) => res.send(_.sample(quotes)));
 
 app.get("/quotes/search", (req, res)  =>  res.send(filterQuotes(req.query.term)));
 
